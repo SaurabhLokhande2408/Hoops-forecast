@@ -30,14 +30,14 @@ NBA/
 │   │   ├── services/              # Data, features, model, and player logic
 │   │   ├── schemas/               # Pydantic request/response models
 │   │   └── ml/train.py            # Offline model training command
+│   ├── Data_preprocessing/        # Legacy cleaning and feature scripts
+│   ├── Dataset/                   # Read-only source dataset
+│   ├── ML_prediction/             # Legacy model script
+│   ├── ML_training/               # Legacy train/test split script
+│   ├── main.py                    # Legacy CLI entry point
 │   ├── tests/                     # FastAPI endpoint tests
 │   └── README.md                  # Backend route reference
 ├── hoops-forecast-frontend/      # React/Vite client
-├── Data_preprocessing/            # Original preprocessing scripts
-├── Dataset/                       # Read-only source dataset
-├── ML_prediction/                 # Original standalone model script
-├── Ml_training/                   # Original train/test split script
-├── main.py                        # Original CLI entry point
 ├── requirements.txt               # Repository-wide Python dependencies
 └── README.md
 ```
@@ -158,7 +158,7 @@ cd backend
 pytest
 ```
 
-The dataset is read from `Dataset/Player Per Game.csv` and is never modified. Backend paths and CORS origins can be overridden in `backend/.env`; see `backend/.env.example`.
+The dataset is read from `backend/Dataset/Player Per Game.csv` and is never modified. Backend paths and CORS origins can be overridden in `backend/.env`; see `backend/.env.example`.
 
 ## API
 

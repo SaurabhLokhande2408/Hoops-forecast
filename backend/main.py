@@ -2,7 +2,7 @@ import os
 from sklearn.linear_model import LinearRegression
 from Data_preprocessing.check_up import check_up_func
 from Data_preprocessing.encoding_scaling import encoding_scaling_func
-from Ml_training.input_output import data_training_func
+from ML_training.input_output import data_training_func
 
 FEATURE_COLUMNS = [
     'pts_per_game',

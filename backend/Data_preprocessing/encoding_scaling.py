@@ -1,7 +1,9 @@
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 
-def encoding_scaling_func(df_copy):
+
+def encoding_scaling_func(df_copy, age_scaler=None):
+    """Create the next-season target, encode positions, and scale age."""
 
     # Add target label for next season points per game
     df_copy = df_copy.sort_values(['player', 'season'])
@@ -18,7 +20,7 @@ def encoding_scaling_func(df_copy):
     )
 
     # Scale age column
-    s_s = StandardScaler()
+    s_s = age_scaler or StandardScaler()
 
     df_copy['age_encoded'] = s_s.fit_transform(df_copy[['age']])
 

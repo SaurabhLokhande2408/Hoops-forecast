@@ -1,7 +1,8 @@
 import os
 from sklearn.model_selection import train_test_split
 
-def data_training_func(df_encoded):
+def data_training_func(df_encoded, verbose=True):
+    """Split encoded features and target into reproducible train/test sets."""
 
     X = df_encoded[
         [
@@ -28,14 +29,14 @@ def data_training_func(df_encoded):
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    print("\n------------Training X ---------------")
-    print(X_train)
-    print("\n------------Training y ---------------")
-    print(y_train)
-
-    print("\n------------Test X ---------------")   
-    print(X_test)
-    print("\n------------Test y ---------------")
-    print(y_test)
+    if verbose:
+        print("\n------------Training X ---------------")
+        print(X_train)
+        print("\n------------Training y ---------------")
+        print(y_train)
+        print("\n------------Test X ---------------")
+        print(X_test)
+        print("\n------------Test y ---------------")
+        print(y_test)
 
     return X_train, X_test, y_train, y_test

@@ -1,6 +1,6 @@
 # Hoop Forecast Backend
 
-FastAPI backend for the NBA points-per-game forecast frontend. The backend reads the existing `../Dataset/Player Per Game.csv` file and never modifies it.
+FastAPI backend for the NBA points-per-game forecast frontend. The backend reads the existing `Dataset/Player Per Game.csv` file and never modifies it.
 
 ## Setup
 

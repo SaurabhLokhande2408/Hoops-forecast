@@ -8,7 +8,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     """Runtime configuration for the FastAPI application."""
 
-    dataset_path: Path = Path("../Dataset/Player Per Game.csv")
+    dataset_path: Path = Path("Dataset/Player Per Game.csv")
     model_path: Path = Path("app/artifacts/model.joblib")
     metrics_path: Path = Path("app/artifacts/metrics.json")
     feature_columns_path: Path = Path("app/artifacts/feature_columns.json")

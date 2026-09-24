@@ -1,7 +1,13 @@
+from pathlib import Path
+
 import pandas as pd
-def check_up_func():
-    
-    data=pd.read_csv("D:\\Programs\\BACKEND\\PROJECTS_SCRATCH\\NBA\\Dataset\\Player Per Game.csv")
+
+
+def check_up_func(dataset_path: Path | None = None):
+    """Load and clean the dataset from the backend-owned Dataset directory."""
+    if dataset_path is None:
+        dataset_path = Path(__file__).resolve().parent.parent / "Dataset" / "Player Per Game.csv"
+    data = pd.read_csv(dataset_path, na_values=["NA"])
     df=pd.DataFrame(data)
    # print(df.head(20))
     #print("\n---------Isnull values in the dataset---------\n")

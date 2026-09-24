@@ -4,6 +4,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from Data_preprocessing.check_up import check_up_func
+
 
 ZERO_FILL_COLUMNS = [
     "x3p_per_game", "x3pa_per_game", "x3p_percent", "x2p_per_game",
@@ -18,17 +20,4 @@ def load_and_clean_dataset(dataset_path: Path) -> pd.DataFrame:
     """Load the player CSV and apply the project's established cleaning rules."""
     if not dataset_path.exists():
         raise FileNotFoundError(f"Dataset not found: {dataset_path}")
-
-    dataframe = pd.read_csv(dataset_path, na_values=["NA"])
-    cleaned = dataframe.copy()
-    available_zero_columns = [column for column in ZERO_FILL_COLUMNS if column in cleaned]
-    cleaned[available_zero_columns] = cleaned[available_zero_columns].fillna(0)
-    available_median_columns = [column for column in MEDIAN_FILL_COLUMNS if column in cleaned]
-    cleaned[available_median_columns] = cleaned[available_median_columns].fillna(
-        cleaned[available_median_columns].median()
-    )
-    cleaned = cleaned.drop(columns=["lg", "player_id", "URL"], errors="ignore")
-    cleaned["pos"] = cleaned["pos"].fillna("unknown")
-    cleaned = cleaned.sort_values("g", ascending=False)
-    cleaned = cleaned.groupby(["player", "season"], as_index=False).first()
-    return cleaned.reset_index(drop=True)
+    return check_up_func(dataset_path)

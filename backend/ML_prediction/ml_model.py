@@ -7,7 +7,7 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT_DIR not in sys.path:
     sys.path.insert(0, ROOT_DIR)
 
-from Ml_training.input_output import data_training_func
+from ML_training.input_output import data_training_func
 from Data_preprocessing.check_up import check_up_func
 from Data_preprocessing.encoding_scaling import encoding_scaling_func
 
