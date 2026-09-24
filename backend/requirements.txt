@@ -1,0 +1,2 @@
+# Keep backend installs aligned with the repository-wide Python dependencies.
+-r ../requirements.txt

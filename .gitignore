@@ -1,0 +1,71 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+
+# Python environments
+.venv/
+venv/
+env/
+ENV/
+backend/venv/
+backend/.venv/
+
+# Packaging and test output
+build/
+dist/
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+nosetests.xml
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+backend/.env
+
+# Generated machine-learning artifacts
+backend/app/artifacts/*
+!backend/app/artifacts/.gitkeep
+*.joblib
+*.pkl
+*.pickle
+
+# Frontend dependencies and build output
+hoops-forecast-frontend/node_modules/
+hoops-forecast-frontend/dist/
+hoops-forecast-frontend/.vite/
+hoops-forecast-frontend/.cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor and operating-system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# Local logs and temporary files
+*.log
+*.tmp
+*.temp
+tmp/
+temp/

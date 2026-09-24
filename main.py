@@ -27,7 +27,7 @@ FEATURE_COLUMNS = [
 df_copy = check_up_func()
 df_encoded = encoding_scaling_func(df_copy)
 X_train, X_test, y_train, y_test = data_training_func(df_encoded)
-
+#branch
 model = LinearRegression()
 model.fit(X_train, y_train)
 

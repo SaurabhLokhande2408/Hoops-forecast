@@ -1,0 +1,1 @@
+"""Hoop Forecast backend application package."""

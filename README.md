@@ -1,6 +1,6 @@
-# Hoop-Forecast 🏀
+# Hoop-Forecast
 
-**Predicting next-season scoring for NBA players — built from scratch as my first ever ML project.**
+**Predicting next-season scoring for NBA players with a FastAPI backend and React frontend.**
 
 *No tutorial followed. No code copied. Just curiosity, a dataset, and a lot of broken runs.*
 
@@ -8,11 +8,11 @@
 
 ## What it does
 
-Given a player's current season stats, Hoop-Forecast predicts how many points per game they'll score **next season**.
+Given a player's latest available season, Hoop-Forecast predicts how many points per game they will score **next season**.
 
 ```
-Enter player name: Stephen Curry
-→ Prediction for Stephen Curry in season 2027: 26.8 pts per game
+Player: Stephen Curry
+Prediction: 26.8 points per game in 2027
 
 MAE : 2.41   MSE : 9.87   RMSE : 3.14   R² : 0.81
 ```
@@ -24,20 +24,21 @@ MAE : 2.41   MSE : 9.87   RMSE : 3.14   R² : 0.81
 ```
 NBA/
 │
-├── Data_preprocessing/
-│   ├── check_up.py                # Loads and cleans the raw CSV
-│   └── encoding_scaling.py        # Encodes positions, scales age, creates the target label
-│
-├── Dataset/
-│   └── Player Per Game.csv        # 33,339 rows · 79 seasons · every NBA player since 1947
-│
-├── ML_prediction/
-│   └── ml_model.py                # Standalone: train + predict
-│
-├── ML_training/
-│   └── input_output.py            # Train/test split
-│
-├── main.py                        # Entry point
+├── backend/
+│   ├── app/
+│   │   ├── api/routes.py          # REST endpoints under /api
+│   │   ├── services/              # Data, features, model, and player logic
+│   │   ├── schemas/               # Pydantic request/response models
+│   │   └── ml/train.py            # Offline model training command
+│   ├── tests/                     # FastAPI endpoint tests
+│   └── README.md                  # Backend route reference
+├── hoops-forecast-frontend/      # React/Vite client
+├── Data_preprocessing/            # Original preprocessing scripts
+├── Dataset/                       # Read-only source dataset
+├── ML_prediction/                 # Original standalone model script
+├── Ml_training/                   # Original train/test split script
+├── main.py                        # Original CLI entry point
+├── requirements.txt               # Repository-wide Python dependencies
 └── README.md
 ```
 
@@ -70,14 +71,14 @@ Every row is one player's per-game averages for one season. **33,339 rows × 32 
 
 ## How it works
 
-### 1. Data cleaning — `check_up.py`
+### 1. Data cleaning — `backend/app/services/data_service.py`
 
 - Missing shooting stats filled with `0` — players who never attempted them effectively have zero
 - Missing `age`, `fg_percent`, `ft_percent` etc. filled with their **median**
 - Players traded mid-season appear multiple times — kept only the row with most games played
 - Dropped irrelevant columns: `lg`, `player_id`, `URL`
 
-### 2. Feature engineering — `encoding_scaling.py`
+### 2. Feature engineering — `backend/app/services/feature_service.py`
 
 The most important step. Three things happen here:
 
@@ -91,11 +92,11 @@ df['next_season_pts'] = df.groupby('player')['pts_per_game'].shift(-1)
 
 **Age scaling** — `StandardScaler` normalises age to mean 0, std 1, so it doesn't get drowned out by larger-ranged stats.
 
-### 3. Train/test split — `input_output.py`
+### 3. Train/test split — `backend/app/ml/train.py`
 
 80/20 split with `random_state=42`. The model never sees the test set during training.
 
-### 4. Model — `main.py`
+### 4. Model — `backend/app/services/model_service.py`
 
 ```python
 model = LinearRegression()
@@ -117,18 +118,62 @@ Linear Regression. Simple and interpretable — the right choice for a first pro
 
 ---
 
-## Setup
+## Setup and run
+
+Create a Python environment from the repository root:
 
 ```bash
-# 1. Install dependencies
-pip install pandas scikit-learn numpy
-
-# 2. Update the dataset path in Data_preprocessing/check_up.py
-data = pd.read_csv("Dataset/Player Per Game.csv")
-
-# 3. Run
-python main.py
+python -m venv .venv
+# Windows PowerShell
+.venv\Scripts\Activate.ps1
+# macOS/Linux
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
+
+Train the model artifacts and start the API:
+
+```bash
+cd backend
+python -m app.ml.train
+uvicorn app.main:app --reload --port 8000
+```
+
+The API is available at `http://localhost:8000`, with interactive documentation at `http://localhost:8000/docs`.
+
+Start the React frontend in a second terminal:
+
+```bash
+cd hoops-forecast-frontend
+npm install
+npm run dev
+```
+
+The frontend uses `http://localhost:8000/api` by default. To change it, copy `hoops-forecast-frontend/.env.example` to `.env` and set `VITE_API_BASE_URL`.
+
+Run backend tests after training:
+
+```bash
+cd backend
+pytest
+```
+
+The dataset is read from `Dataset/Player Per Game.csv` and is never modified. Backend paths and CORS origins can be overridden in `backend/.env`; see `backend/.env.example`.
+
+## API
+
+All API routes use the `/api` prefix:
+
+| Method | Route | Purpose |
+|---|---|---|
+| `GET` | `/api/health` | Service and model readiness |
+| `GET` | `/api/players?search=cur&limit=8` | Search player names |
+| `GET` | `/api/players/{player_name}` | Latest season statistics |
+| `GET` | `/api/players/{player_name}/history` | Full season history |
+| `POST` | `/api/predict` | Predict next-season points with `{ "player_name": "Stephen Curry" }` |
+| `GET` | `/api/model/metrics` | Held-out model metrics and feature list |
+
+Unknown players return `404` responses with close-match suggestions. Invalid request bodies and query parameters return FastAPI `422` responses.
 
 ---
 
@@ -156,7 +201,7 @@ This was my first real encounter with ML — not a tutorial, not a guided exerci
 
 ## Stack
 
-`pandas` · `scikit-learn` · `numpy`
+`pandas` · `scikit-learn` · `numpy` · `FastAPI` · `Uvicorn` · `React` · `Vite`
 
 ---
 
